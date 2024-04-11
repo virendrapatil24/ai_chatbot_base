@@ -8,7 +8,6 @@ client = OpenAI(
 )
 
 def get_completion_from_messages(messages, model="gpt-3.5-turbo", temperature=0, max_tokens=150):
-
     try:
         response = client.chat.completions.create(
             model = model,
@@ -16,10 +15,8 @@ def get_completion_from_messages(messages, model="gpt-3.5-turbo", temperature=0,
             temperature = temperature,
             max_tokens = max_tokens,
         )
-
     except Exception as e:
         print('Error', e)
-
     return response.choices[0].message["content"]
 
 def update_messages(message, messages):
@@ -41,7 +38,6 @@ def get_bot_response(user_input, messages):
         bot_response = "I apologize, but I do not have a response for that."
     
     return bot_response
-
 
 def main():
     messages = []
