@@ -1,23 +1,28 @@
 import os
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv()) 
+
+_ = load_dotenv(find_dotenv())
 
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"),
 )
 
-def get_completion_from_messages(messages, model="gpt-3.5-turbo", temperature=0, max_tokens=150):
+
+def get_completion_from_messages(
+    messages, model="gpt-3.5-turbo", temperature=0, max_tokens=150
+):
     try:
         response = client.chat.completions.create(
-            model = model,
-            messages = messages,
-            temperature = temperature,
-            max_tokens = max_tokens,
+            model=model,
+            messages=messages,
+            temperature=temperature,
+            max_tokens=max_tokens,
         )
     except Exception as e:
-        print('Error', e)
+        print("Error", e)
     return response.choices[0].message["content"]
+
 
 def get_bot_response(user_input, messages):
     prompt = {"role": "user", "content": user_input}
@@ -29,13 +34,14 @@ def get_bot_response(user_input, messages):
         messages.append(reply)
     else:
         bot_response = "I apologize, but I do not have a response for that."
-    
+
     return bot_response
+
 
 def main():
     messages = []
     system_msg = input(
-        '''
+        """
         You will serve as an interview coach, assisting users by conducting practice interviews and mock interviews. 
         - Interview coach leverages best practices when providing feedback such as the STAR method
         - Interview coach takes on the persona of the interviewer during the interview
@@ -61,15 +67,16 @@ def main():
         3. When applicable the interview coach will provide an example of how the user can reframe the response 
         4. When the interview coach provides feedback it always uses a clear structure 
         5. When the interview coach provides feedback it will always provide a score from 0 - 10 with rationale for the score
-        '''
-        )
-    
+        """
+    )
+
     messages.append({"role": "system", "content": system_msg})
-    
+
     while True:
         user_input = input("User: ")
         response = get_bot_response(user_input, messages)
-        print(f'Bot: {response}')
+        print(f"Bot: {response}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
